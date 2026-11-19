@@ -46,6 +46,27 @@ export interface StockInfo {
   lowStock: boolean;
 }
 
+/** Compact product shape used for "related products" suggestions. */
+export interface RelatedProductSummary {
+  id: string;
+  name: string;
+  slug: string;
+  image?: string;
+  price: number;
+  currency: string;
+}
+
+/** Output of the `getProductDetails` agent tool, also consumed by the chat UI. */
+export type ProductDetailsResult =
+  | {
+      found: true;
+      product: Product & { url: string };
+      /** Live inventory; null when the stock lookup failed. */
+      stock: Pick<StockInfo, "stock" | "inStock" | "lowStock"> | null;
+      related: RelatedProductSummary[];
+    }
+  | { found: false; error: string };
+
 export interface Category {
   slug: CategorySlug | string;
   name: string;
